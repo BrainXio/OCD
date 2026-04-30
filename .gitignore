@@ -38,4 +38,5 @@ uv.lock
 
 # Task files
 prompt.txt
+tasks.json
 .mcp.json
