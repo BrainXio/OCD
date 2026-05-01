@@ -81,7 +81,7 @@ def _effective_severity(prec: dict[str, Any]) -> str:
     base = prec.get("severity", "warning")
     hits = prec.get("hits", 0)
     if hits < 2:
-        return base
+        return str(base)
     try:
         idx = _SEVERITY_ORDER.index(base)
     except ValueError:
@@ -111,9 +111,7 @@ def _run_check(cmd: str, cwd: Path, timeout: int = 30) -> tuple[bool, str]:
     return hit, output
 
 
-def check_precedents(
-    scope: str = "both", root: Path | None = None
-) -> dict[str, Any]:
+def check_precedents(scope: str = "both", root: Path | None = None) -> dict[str, Any]:
     """Run all precedent checks for the given scope.
 
     Returns a dict with overall status and per-precedent results.
@@ -197,7 +195,9 @@ def remember_issue(
                 break
 
     prec_file = cwd / PRECEDENTS_FILENAME
-    data = _load_precedents(prec_file) if prec_file.exists() else {"version": 1, "precedents": []}
+    data: dict[str, Any] = (
+        _load_precedents(prec_file) if prec_file.exists() else {"version": 1, "precedents": []}
+    )
 
     new_prec = {
         "id": secrets.token_hex(4),

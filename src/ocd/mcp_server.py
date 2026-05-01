@@ -267,12 +267,8 @@ async def ocd_check() -> str:
         )
     else:
         hits = prec_result.get("hits", [])
-        detail = " | ".join(
-            f"{h['description']} ({h['severity']})" for h in hits if h["hit"]
-        )
-        results.append(
-            {"check": "precedent-check", "status": "fail", "detail": detail}
-        )
+        detail = " | ".join(f"{h['description']} ({h['severity']})" for h in hits if h["hit"])
+        results.append({"check": "precedent-check", "status": "fail", "detail": detail})
 
     passed = sum(1 for r in results if r["status"] == "pass")
     failed = sum(1 for r in results if r["status"] == "fail")
